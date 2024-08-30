@@ -5,6 +5,7 @@ def solution(s):
             answer += char.upper()
         else:
             answer += char.lower()
+            
         before = char
             
     return answer
