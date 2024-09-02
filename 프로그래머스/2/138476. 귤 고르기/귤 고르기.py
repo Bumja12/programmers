@@ -1,30 +1,14 @@
-from collections import defaultdict
+from collections import Counter
 
 def solution(k, tangerine):
-    # Step 1: Create a frequency dictionary
-    freq = defaultdict(int)
-    for t in tangerine:
-        freq[t] += 1
-
-    # Step 2: Create a list to store frequencies, assuming the size range is known
-    max_freq = max(freq.values())
-    count_buckets = [0] * (max_freq + 1)
+    tan_dic = Counter(tangerine)
     
-    for f in freq.values():
-        count_buckets[f] += 1
-
-    # Step 3: Iterate over the buckets from high to low frequency
     s = 0
-    types = 0
-    
-    for f in range(max_freq, 0, -1):
-        if count_buckets[f] > 0:
-            num_tangerines = f * count_buckets[f]
-            if s + num_tangerines >= k:
-                # Calculate how many types are needed
-                needed = (k - s + f - 1) // f  # ceiling division
-                return types + needed
-            s += num_tangerines
-            types += count_buckets[f]
+    for i, value in enumerate(sorted(tan_dic.values(), reverse=True)):
+        s += value
+        if s >= k:
+            return i + 1
 
-    return types + 2
+# dict 없이는 도저히 해결하는 방법이 떠오르지 않음
+# Counter 함수의 힘을 빌려 dict 간단하게 생성
+# 밸류를 내림차순으로 정렬하여 더하면서 k와 같거나 커지는 순간 리턴
