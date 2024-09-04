@@ -1,18 +1,18 @@
-def solution(k, dungeons, answer = 1):
+def solution(k, dungeons, answer=0):
     if not dungeons: 
-        return answer - 1
+        return answer
 
-    arr = []
-    for dungeon in dungeons:
-        current_fatigue = k - dungeon[1]
+    max_dungeons = answer
 
-        i = dungeons.index(dungeon)
-        new_dungeons = list(filter(lambda x: x[0] <= current_fatigue, dungeons[:i] + dungeons[i+1:]))
-        arr.append(solution(current_fatigue, new_dungeons, answer + 1))
+    for i, dungeon in enumerate(dungeons):
+        required_fatigue, consume_fatigue = dungeon
 
-    return max(arr)
+        if k >= required_fatigue:
+            new_k = k - consume_fatigue
+            remaining_dungeons = dungeons[:i] + dungeons[i+1:]
+            max_dungeons = max(max_dungeons, solution(new_k, remaining_dungeons, answer + 1))
 
-# 단순 정렬만으로는 답이 나올 수 없어 보임
-# 결국 순회를 해야하는데, 어차피 길이가 8인 배열이므로 그냥 순회하기로 결정
-# 그래도 최소한의 순회를 하기 위해 filter 를 이용해 갈 수 있는 던전만 입력
-# 갈 수 있는 모든 던전을 도는 경우의 수를 list에 담고 최댓값을 리턴
+    return max_dungeons
+
+## filter가 없는게 가독성도 좋고, 오히려 빠른 것 같아서 수정
+## 기존 배열방식을 기존 최댓값과 비교해 그때그때 갱신하도록 수정
