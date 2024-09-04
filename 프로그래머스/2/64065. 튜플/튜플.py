@@ -1,15 +1,16 @@
 def solution(s):
-    dic = {len(se): se for se in [set(split.split(",")) for split in s[2:len(s)-2].split("},{")]}
+    sets = [set(map(int, group.split(','))) for group in s[2:-2].split("},{")]
+
+    sets.sort(key=len)
     
     answer = []
+    prev_set = set()
     
-    for i in range(1, len(dic) + 1):
-        if i == 1:
-            answer.append(int(next(iter(dic[i]))))
-        else:
-            answer.append(int(next(iter(dic[i] - dic[i-1]))))
-        
+    for current_set in sets:
+        answer.append(next(iter(current_set - prev_set)))
+        prev_set = current_set
+    
     return answer
 
-# split을 이용해 각 요소들을 분리하고 set으로 변환, 이후 set의 길이를 키, set을 벨류로 갖는 dict 생성
-# 차집합을 통해 작은 요소부터 값을 구해 answer에 append
+## 기존 코드는 sets.sort(key=len) 과정이 필요없었기에 nlogn 만큼 시간이 덜 걸렸지만,
+## 해당 코드가 가독성 측면이나 논리 측면에서 더 맘에 들어 남겨놓는다.
