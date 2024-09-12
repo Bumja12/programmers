@@ -1,12 +1,19 @@
-def helper(arr, index, result, result_arr):
-    if index == len(arr):
-        result_arr.append(result)
-        return
-    
-    helper(arr, index+1, result + arr[index], result_arr)
-    helper(arr, index+1, result - arr[index], result_arr)
+from collections import deque
 
 def solution(numbers, target):
-    result_arr = []
-    helper(numbers, 0, 0, result_arr)
-    return result_arr.count(target)
+    queue = deque([(0, 0)])
+    count = 0
+    
+    while queue:
+        current_sum, index = queue.popleft()
+        
+        if index == len(numbers):
+            if current_sum == target:
+                count += 1
+        else:
+            queue.append((current_sum + numbers[index], index + 1))
+            queue.append((current_sum - numbers[index], index + 1))
+    
+    return count
+
+## 너비 우선 탐색
